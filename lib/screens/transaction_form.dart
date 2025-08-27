@@ -172,21 +172,17 @@ class _TransactionFormState extends State<TransactionForm> {
   @override
   Widget build(BuildContext context) {
     if (widget.transaction != null) {
-      // ดึงข้อมูลล่าสุดจาก TransactionController ด้วย uuid
       final transactionController = Get.find<TransactionController>();
       final latestTransaction = transactionController.getTransactionByUuid(
         widget.transaction.uuid,
       );
-
       if (latestTransaction != null) {
-        // ในกรณีที่ edit
         _nameController.text = latestTransaction.name;
         _descController.text = latestTransaction.desc;
         _amountController.text = latestTransaction.amount.toString();
         _type = latestTransaction.type;
         _selectedDate = DateTime.tryParse(latestTransaction.date);
       } else {
-        // fallback กรณีไม่พบใน controller
         _nameController.text = widget.transaction.name;
         _descController.text = widget.transaction.desc;
         _amountController.text = widget.transaction.amount.toString();
@@ -195,98 +191,171 @@ class _TransactionFormState extends State<TransactionForm> {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 40),
-
-            Text(
-              widget.transaction != null
-                  ? 'แก้ไขข้อมูลการทำรายการ'
-                  : 'บันทึกข้อมูลการทำรายการ',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'ชื่อรายการ'),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'กรุณากรอกชื่อรายการ' : null,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _descController,
-              decoration: const InputDecoration(labelText: 'รายละเอียด'),
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'กรุณากรอกรายละเอียด' : null,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _amountController,
-              decoration: const InputDecoration(labelText: 'จำนวนเงิน'),
-              keyboardType: TextInputType.number,
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'กรุณากรอกจำนวนเงิน' : null,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<int>(
-              value: _type,
-              decoration: const InputDecoration(labelText: 'ประเภท'),
-              items: const [
-                DropdownMenuItem(value: 1, child: Text('รายรับ')),
-                DropdownMenuItem(value: -1, child: Text('รายจ่าย')),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _type = value ?? -1;
-                });
-              },
-            ),
-            Row(
+    return Center(
+      child: Card(
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        color: Colors.lightBlue[50],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Text(
-                    _selectedDate == null
-                        ? 'กรุณาเลือกวันที่'
-                        : 'วันที่: ${_selectedDate!.toIso8601String().substring(0, 10)}',
+                Icon(
+                  widget.transaction != null
+                      ? Icons.edit_note
+                      : Icons.add_circle_outline,
+                  size: 60,
+                  color: Colors.blueAccent,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  widget.transaction != null
+                      ? 'แก้ไขข้อมูลการทำรายการ'
+                      : 'บันทึกข้อมูลการทำรายการ',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.blue[700],
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 16),
+                Divider(color: Colors.blueAccent, thickness: 1),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'ชื่อรายการ',
+                    prefixIcon: Icon(Icons.receipt_long, color: Colors.blueAccent),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'กรุณากรอกชื่อรายการ' : null,
                 ),
-                TextButton(
-                  onPressed: _pickDate,
-                  child: const Text('เลือกวันที่'),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _descController,
+                  decoration: InputDecoration(
+                    labelText: 'รายละเอียด',
+                    prefixIcon: Icon(Icons.description, color: Colors.blueAccent),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'กรุณากรอกรายละเอียด' : null,
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _amountController,
+                  decoration: InputDecoration(
+                    labelText: 'จำนวนเงิน',
+                    prefixIcon: Icon(Icons.attach_money, color: Colors.blueAccent),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'กรุณากรอกจำนวนเงิน' : null,
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<int>(
+                  value: _type,
+                  decoration: InputDecoration(
+                    labelText: 'ประเภท',
+                    prefixIcon: Icon(Icons.category, color: Colors.blueAccent),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 1, child: Text('รายรับ')),
+                    DropdownMenuItem(value: -1, child: Text('รายจ่าย')),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _type = value ?? -1;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'กรุณาเลือกวันที่'
+                            : 'วันที่: ${_selectedDate!.toIso8601String().substring(0, 10)}',
+                        style: TextStyle(
+                          color: Colors.blue[700],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: _pickDate,
+                      icon: Icon(Icons.calendar_month, color: Colors.blueAccent),
+                      label: const Text('เลือกวันที่'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.blueAccent,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        widget.transaction != null
+                            ? _submitUpdateForm()
+                            : _submitCreateForm();
+                      },
+                      icon: Icon(Icons.save, color: Colors.white),
+                      label: const Text('บันทึกข้อมูล'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
                     widget.transaction != null
-                        ? _submitUpdateForm()
-                        : _submitCreateForm();
-                  }, //_submitForm,
-                  child: const Text('บันทึกข้อมูล'),
+                        ? const SizedBox(width: 16)
+                        : Container(),
+                    widget.transaction != null
+                        ? ElevatedButton.icon(
+                            onPressed: _submitDeleteForm,
+                            icon: Icon(Icons.delete, color: Colors.white),
+                            label: const Text('ลบข้อมูล'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
                 ),
-                widget.transaction != null
-                    ? const SizedBox(width: 16)
-                    : Container(),
-                widget.transaction != null
-                    ? ElevatedButton(
-                        onPressed: () {
-                          _submitDeleteForm();
-                        },
-                        child: Text('ลบข้อมูล'),
-                      )
-                    : Container(),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
