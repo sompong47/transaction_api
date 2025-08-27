@@ -22,7 +22,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // ✅ ใส่ Get.put() ตรงนี้
   final AuthController authController = Get.put(AuthController());
-  final TransactionController transactionController = Get.put(TransactionController());
+  final TransactionController transactionController = Get.put(
+    TransactionController(),
+  );
   final StorageService _storageService = StorageService();
 
   Future<List<TransactionData>> _getAllTransaction() async {
@@ -50,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
         transactionController.setTransactions(
           list
               .map(
-                (item) => TransactionData.fromJson(item as Map<String, dynamic>),
+                (item) =>
+                    TransactionData.fromJson(item as Map<String, dynamic>),
               )
               .toList(),
         );
