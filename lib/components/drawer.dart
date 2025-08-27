@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
+import '../routes/app_routes.dart'; // อย่าลืมนำเข้าด้วย
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({super.key});
@@ -19,18 +20,18 @@ class AppDrawer extends StatelessWidget {
             UserAccountsDrawerHeader(
               accountName: Text(
                 user?.fullName ?? "Guest",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               accountEmail: Text(
                 user?.email ?? "",
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              currentAccountPicture: CircleAvatar(
+              currentAccountPicture: const CircleAvatar(
                 backgroundColor: Colors.blueAccent,
                 child: Icon(Icons.person, size: 40, color: Colors.white),
               ),
-              decoration: BoxDecoration(color: Colors.blueAccent),
-              otherAccountsPictures: [
+              decoration: const BoxDecoration(color: Colors.blueAccent),
+              otherAccountsPictures: const [
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(Icons.star, color: Colors.amber),
@@ -42,30 +43,31 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
+              leading: const Icon(Icons.home),
+              title: const Text("Home"),
               onTap: () {
                 Navigator.of(context).pop();
+                Get.toNamed(AppRoutes.home);
               },
             ),
-            // ListTile(
-            //   leading: Icon(Icons.account_box),
-            //   title: Text("About"),
-            //   onTap: () {},
-            // ),
-            // ListTile(
-            //   leading: Icon(Icons.grid_3x3_outlined),
-            //   title: Text("Products"),
-            //   onTap: () {},
-            // ),
-            // ListTile(
-            //   leading: Icon(Icons.contact_mail),
-            //   title: Text("Contact"),
-            //   onTap: () {},
-            // ),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Logout"),
+              leading: const Icon(Icons.list),
+              title: const Text("Transactions"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Get.toNamed(AppRoutes.transactionList); // เพิ่มเมนู TransactionList
+              },
+            ),
+            ListTile(
+                leading: Icon(Icons.person),
+                title: Text("โปรไฟล์"),
+                onTap: () {
+                  Get.toNamed(AppRoutes.profile);
+  },
+),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text("Logout"),
               onTap: () {
                 authController.logout();
               },

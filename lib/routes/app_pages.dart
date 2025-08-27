@@ -6,6 +6,8 @@ import '../screens/login.dart';
 import '../screens/regis.dart';
 import '../screens/forget_pass.dart';
 import '../screens/home.dart';
+import '../screens/transaction_list.dart';
+import '../screens/profile.dart';
 
 class AppPages {
   AppPages._();
@@ -50,13 +52,18 @@ class AppPages {
       transition: Transition.zoom,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-    /*
     GetPage(
-      name: AppRoutes.PROFILE,
-      page: () => const ProfileScreen(),
-      transition: Transition.rightToLeft,
+      name: AppRoutes.transactionList,
+      page: () => const TransactionListScreen(),
+      transition: Transition.zoom,
       transitionDuration: const Duration(milliseconds: 300),
-    ),
-    */
+),
+
+    GetPage(
+  name: AppRoutes.profile,
+  page: () => ProfileScreen(), // ลบ const
+  transition: Transition.rightToLeft,
+  transitionDuration: const Duration(milliseconds: 300),
+),
   ];
 }
