@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:form_validate/services/storage_service.dart';
 import 'package:form_validate/utils/api.dart';
@@ -21,13 +20,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthController authController = Get.find<AuthController>();
+  // ✅ ใส่ Get.put() ตรงนี้
+  final AuthController authController = Get.put(AuthController());
+  final TransactionController transactionController = Get.put(TransactionController());
   final StorageService _storageService = StorageService();
-
-  // ใช้งาน TransactionController แทน RxList
-  final TransactionController transactionController = Get.put(
-    TransactionController(),
-  );
 
   Future<List<TransactionData>> _getAllTransaction() async {
     await _storageService.init();
@@ -54,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         transactionController.setTransactions(
           list
               .map(
-                (item) =>
-                    TransactionData.fromJson(item as Map<String, dynamic>),
+                (item) => TransactionData.fromJson(item as Map<String, dynamic>),
               )
               .toList(),
         );
@@ -81,7 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            // ใช้ Obx เพื่อให้ GUI อัปเดตเมื่อ transactions เปลี่ยน
             return Obx(
               () => ListView.builder(
                 itemCount: transactionController.transactions.length,
@@ -111,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       SingleChildScrollView(
                         controller: scrollController,
-                        child: TransactionForm(),
+                        child: const TransactionForm(),
                       ),
                       Positioned(
                         top: 8,
