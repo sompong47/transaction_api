@@ -66,16 +66,17 @@ class _LoginScreenState extends State<LoginScreen>
     });
 
     try {
-      AuthController authController = Get.put(AuthController());
+      AuthController authController = Get.find<AuthController>();
       bool loginSuccess = await authController.login(
         email: _emailController.text,
         password: _passwordController.text,
       );
-
+      print('loginSuccess: $loginSuccess');
       if (loginSuccess) {
         NavigationHelper.toHome(clearStack: true);
       }
     } catch (e) {
+      print('Login error: $e');
       NavigationHelper.showErrorSnackBar(
         'เกิดข้อผิดพลาดในการเข้าสู่ระบบ กรุณาลองใหม่อีกครั้ง',
       );
