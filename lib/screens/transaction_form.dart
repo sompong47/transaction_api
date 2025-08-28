@@ -270,7 +270,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
-                  value: _type,
+                  initialValue: _type,
                   decoration: InputDecoration(
                     labelText: 'ประเภท',
                     prefixIcon: Icon(Icons.category, color: Colors.blueAccent),
