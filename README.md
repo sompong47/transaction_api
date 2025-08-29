@@ -391,12 +391,9 @@ of this software for educational and development purposes.
 
 <div align="center">
 
-**ผู้ช่วยศาสตราจารย์ พิศาล สุขขี**  
+  **นายสมพงษ์ ใยคำ**  
 🏛️ **สาขาวิทยาการคอมพิวเตอร์**  
 🎓 **มหาวิทยาลัยราชภัฏศรีสะเกษ**
-
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)](https://github.com/numvarn)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail)](mailto:phisan.su@sskru.ac.th)
 
 </div>
 
